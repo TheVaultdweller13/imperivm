@@ -1,0 +1,19 @@
+name: Run Imperivm Program
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Execute tests
+        run: ./test.sh
+        continue-on-error: false
