@@ -2,7 +2,7 @@ from parsimonious.grammar import Grammar
 
 imperivm = Grammar(
     r"""
-    program         = subroutine (sp_0n br ws_0n subroutine)* ws_0n
+    program         = subroutine (sp_0n br ws_0n subroutine)* ws_0n (EOF / error)
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
     instruction     = assignment / conditional / loop / stack_op / arithmetic_op / io_op / stop / identifier / halt
@@ -50,5 +50,8 @@ imperivm = Grammar(
     multiply        = ~r"multiply"i
     divide          = ~r"divide"i
     print           = ~r"print"i
+
+    error           = (!EOF ~r".*") EOF
+    EOF             = ~r"$(?![\r\n])"
     """
 )

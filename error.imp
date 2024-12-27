@@ -1,0 +1,9 @@
+main begin
+  push 0
+  push 1
+  push 1
+  push 1
+  pop x
+  while x do
+    pop x
+end
