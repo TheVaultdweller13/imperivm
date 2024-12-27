@@ -58,7 +58,7 @@ class ImperivmExecutor:
             # odd numbered lists have an else, execute it if everything else failed
             if len(rest) % 2:
                 block = rest[-1]
-                child_bindings = self.inherit_bindings(bindings)
+                child_bindings = self.inherit_bindingexecute_instructions(bindings)
                 self.execute_block(block, child_bindings)
 
         elif operation == "while":
@@ -116,8 +116,8 @@ class ImperivmExecutor:
             bindings[name] = value
 
     def invoke_subroutine(self, name, bindings):
-        if "main" not in self.subroutines:
-            raise UnknownSubroutine(f"No nubroutine called {name}")
+        if name not in self.subroutines:
+            raise UnknownSubroutine(f"No subroutine called {name}")
         self.execute_block(self.subroutines[name], bindings)
 
     def run(self):
