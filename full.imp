@@ -1,0 +1,78 @@
+slow_multiply begin
+  pop x
+  pop y
+  assign 0 result
+  while x do
+    subtract 1 x
+    add y result
+  end
+  push result
+end
+
+lol begin
+  pop x
+  pop y
+  assign 0 result
+  while x do
+    subtract 1 x
+    add y result
+  end
+  push result
+end
+
+main begin
+  assign 0 x
+  assign 1 y
+
+  if x do
+    assign 5 y
+  end
+
+  if x do
+    assign 5 y
+  end elif y do
+    assign 7 y
+  end
+
+  if x do
+    assign 5 y
+  end else do
+    assign 9 y
+  end
+
+  if x do
+    assign 5 y
+  end elif y do
+    assign 7 y
+  end else do
+    assign 9 y
+  end
+
+  if x do
+    assign 5 y
+  end elif y do
+    assign 7 y
+  end elif y do
+    assign 12 y
+  end else do
+    assign 9 y
+    assign 13 y
+  end
+
+  assign 0 x
+  assign 5 y
+  while y do
+    add 1 x
+    print x
+    subtract 1 y
+  end
+
+  push 5
+  push 4
+  slow_multiply
+  pop x
+
+  print x
+
+  print "Salve, mundus!"
+end
