@@ -1,5 +1,5 @@
 #!/bin/env bash
-set -euxo pipefail
+set -euo pipefail
 
 failed=0
 for t in tests/*.imp
