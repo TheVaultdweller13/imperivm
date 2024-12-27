@@ -23,10 +23,7 @@ jobs:
         run: pip install pipenv
 
       - name: Install dependencies
-        run: |
-          pipenv install
-          pipenv shell
+        run: pipenv install
 
       - name: Execute tests
-        run: ./test.sh
-        continue-on-error: false
+        run: pipenv run testgit
