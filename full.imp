@@ -9,17 +9,6 @@ slow_multiply begin
   push result
 end
 
-lol begin
-  pop x
-  pop y
-  assign 0 result
-  while x do
-    subtract 1 x
-    add y result
-  end
-  push result
-end
-
 main begin
   assign 0 x
   assign 1 y

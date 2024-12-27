@@ -1,0 +1,53 @@
+from parsimonious.grammar import Grammar
+
+imperivm = Grammar(
+    r"""
+    program         = subroutine (sp_0n br ws_0n subroutine)* ws_0n
+    subroutine      = identifier ws_1n block
+    block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
+    instruction     = assignment / conditional / loop / stack_op / arithmetic_op / io_op / stop / invocation
+
+    assignment      = assign sp_1n value sp_1n identifier
+    conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
+    loop            = while sp_1n value ws_1n block
+    stack_op        = (push sp_1n value) / (pop sp_1n identifier)
+    arithmetic_op   = (add / subtract / multiply / divide) sp_1n value sp_1n identifier
+    io_op           = print sp_1n value
+    invocation      = identifier
+
+    value           = identifier / literal
+    literal         = integer / float / string
+
+    identifier      = !reserved ~r"[a-z][a-z0-9_]*"i
+    
+    integer         = ~r"0|([1-9][0-9]*)"
+    float           = ~r"(0|([1-9][0-9]*))\.[0-9]+"
+    string          = quote string_text quote
+
+    quote           = "\""
+    string_text     = ~r"([^\"\\]|\\.)*"
+
+    br              = ~r"\n"
+    ws_0n           = ~r"\s*"
+    ws_1n           = ~r"\s+"
+    sp_0n           = ~r"[ \t]*"
+    sp_1n           = ~r"[ \t]+"
+
+    reserved        = begin / end / stop / if / elif / else / while / push / pop / assign / add / subtract / multiply / divide / print
+    begin           = ~r"begin"i / ~r"do"i
+    end             = ~r"end"i
+    stop            = ~r"stop"i
+    if              = ~r"if"i
+    elif            = ~r"elif"i
+    else            = ~r"else"i
+    while           = ~r"while"i
+    push            = ~r"push"i
+    pop             = ~r"pop"i
+    assign          = ~r"assign"i
+    add             = ~r"add"i
+    subtract        = ~r"subtract"i
+    multiply        = ~r"multiply"i
+    divide          = ~r"divide"i
+    print           = ~r"print"i
+    """
+)
