@@ -1,8 +1,4 @@
-KEY_PARENT = "$parent"
-
-
-class UnknownNameException(Exception):
-    pass
+from bindings import Bindings
 
 
 class UnknownSubroutine(Exception):
@@ -16,54 +12,54 @@ class ImperivmExecutor:
         for _, (_, identifier), block in ast:
             self.subroutines[identifier] = block
 
-    def execute_block(self, block, bindings):
+    def execute_block(self, block, bindings: Bindings):
         for instruction in block:
             stop = self.execute_instruction(instruction, bindings)
             if stop:
                 return True
 
-    def execute_instruction(self, instruction, bindings):
+    def execute_instruction(self, instruction, bindings: Bindings):
         operation, *rest = instruction
 
         if operation == "add":
             value, (_, target) = rest
-            old = self.resolve_id(target, bindings)
+            old = bindings.resolve(target)
             current = self.resolve_value(value, bindings)
-            self.assign_value(bindings, target, old + current)
+            bindings.assign(target, old + current)
         elif operation == "subtract":
             value, (_, target) = rest
-            old = self.resolve_id(target, bindings)
+            old = bindings.resolve(target)
             current = self.resolve_value(value, bindings)
-            self.assign_value(bindings, target, old - current)
+            bindings.assign(target, old - current)
         elif operation == "multiply":
             value, (_, target) = rest
-            old = self.resolve_id(target, bindings)
+            old = bindings.resolve(target)
             current = self.resolve_value(value, bindings)
-            self.assign_value(bindings, target, old * current)
+            bindings.assign(target, old * current)
         elif operation == "divide":
             value, (_, target) = rest
-            old = self.resolve_id(target, bindings)
+            old = bindings.resolve(target)
             current = self.resolve_value(value, bindings)
-            self.assign_value(bindings, target, old / current)
+            bindings.assign(target, old / current)
         elif operation == "if":
             for index in range(0, len(rest) - 1, 2):
                 condition = rest[index]
                 block = rest[index + 1]
 
                 if self.resolve_value(condition, bindings):
-                    child_bindings = self.inherit_bindings(bindings)
+                    child_bindings = bindings.inherit()
                     return self.execute_block(block, child_bindings)
 
             # odd numbered lists have an else, execute it if everything else failed
             if len(rest) % 2:
                 block = rest[-1]
-                child_bindings = self.inherit_bindings(bindings)
+                child_bindings = bindings.inherit()
                 return self.execute_block(block, child_bindings)
 
         elif operation == "while":
             condition, block = rest
             while self.resolve_value(condition, bindings):
-                child_bindings = self.inherit_bindings(bindings)
+                child_bindings = bindings.inherit()
                 stop = self.execute_block(block, child_bindings)
                 if stop:
                     return True
@@ -75,14 +71,14 @@ class ImperivmExecutor:
         elif operation == "pop":
             _, target = rest[0]
             value = self.stack.pop()
-            self.assign_value(bindings, target, value)
+            bindings.assign(target, value)
         elif operation == "assign":
             value, (_, target) = rest
             result = self.resolve_value(value, bindings)
-            self.assign_value(bindings, target, result)
+            bindings.assign(target, result)
         elif operation == "invocation":
             _, subroutine = rest[0]
-            self.invoke_subroutine(subroutine, {})
+            self.invoke_subroutine(subroutine, Bindings())
         elif operation == "stop":
             return True
         else:
@@ -90,40 +86,17 @@ class ImperivmExecutor:
 
         return False
 
-    def resolve_value(self, value, bindings: dict):
+    def resolve_value(self, value, bindings: Bindings):
         kind, content = value
         if kind == "id":
-            return self.resolve_id(content, bindings)
+            return bindings.resolve(content)
 
         return content
 
-    @staticmethod
-    def resolve_id(name, bindings):
-        if name not in bindings:
-            if KEY_PARENT not in bindings:
-                raise UnknownNameException(f"Unbound name {name}")
-            return ImperivmExecutor.resolve_id(name, bindings[KEY_PARENT])
-        return bindings[name]
-
-    @staticmethod
-    def inherit_bindings(bindings):
-        return {KEY_PARENT: bindings}
-
-    @staticmethod
-    def assign_value(bindings, name, value):
-        current = bindings
-        while name not in current and KEY_PARENT in bindings:
-            current = bindings[KEY_PARENT]
-
-        if name in current:
-            current[name] = value
-        else:
-            bindings[name] = value
-
-    def invoke_subroutine(self, name, bindings):
+    def invoke_subroutine(self, name, bindings: Bindings):
         if name not in self.subroutines:
             raise UnknownSubroutine(f"No subroutine called {name}")
         self.execute_block(self.subroutines[name], bindings)
 
     def run(self):
-        self.invoke_subroutine("main", {})
+        self.invoke_subroutine("main", Bindings())
