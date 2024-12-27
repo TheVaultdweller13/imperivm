@@ -23,7 +23,9 @@ jobs:
         run: pip install pipenv
 
       - name: Install dependencies
-        run: pipenv install --deploy --ignore-pipfile
+        run: |
+          pipenv install
+          pipenv shell
 
       - name: Execute tests
         run: ./test.sh
