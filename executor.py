@@ -46,7 +46,21 @@ class ImperivmExecutor:
             current = self.resolve_value(value, bindings)
             self.assign_value(bindings, target, old / current)
         elif operation == "if":
-            print(operation)
+            for index in range(0, len(rest) - 1, 2):
+                condition = rest[index]
+                block = rest[index + 1]
+
+                if self.resolve_value(condition, bindings):
+                    child_bindings = self.inherit_bindings(bindings)
+                    self.execute_block(block, child_bindings)
+                    return
+
+            # odd numbered lists have an else, execute it if everything else failed
+            if len(rest) % 2:
+                block = rest[-1]
+                child_bindings = self.inherit_bindings(bindings)
+                self.execute_block(block, child_bindings)
+
         elif operation == "while":
             condition, block = rest
             while self.resolve_value(condition, bindings):
