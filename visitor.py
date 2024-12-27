@@ -12,7 +12,7 @@ class ImperivmVisitor(NodeVisitor):
 
     def visit_subroutine(self, _, visited_children):
         identifier, _, block = visited_children
-        return ("subroutine", identifier, block)
+        return "subroutine", identifier, block
 
     def visit_block(self, _, visited_children):
         _, _, instructions, _, _ = visited_children
@@ -29,7 +29,7 @@ class ImperivmVisitor(NodeVisitor):
 
     def visit_assignment(self, _, visited_children):
         instruction, _, value, _, target = visited_children
-        return (instruction.text, value, target)
+        return instruction.text, value, target
 
     def visit_conditional(self, _, visited_children):
         operation, _, condition, _, block, elif_operations, else_operations = (
@@ -51,23 +51,27 @@ class ImperivmVisitor(NodeVisitor):
 
     def visit_loop(self, _, visited_children):
         operation, _, condition, _, block = visited_children
-        return (operation.text, condition, block)
+        return operation.text, condition, block
 
     def visit_stack_op(self, _, visited_children):
         [child] = visited_children
         operation, _, target = child
-        return (operation.text, target)
+        return operation.text, target
 
     def visit_arithmetic_op(self, _, visited_children):
         [operation], _, value, _, target = visited_children
-        return (operation.text, value, target)
+        return operation.text, value, target
 
     def visit_io_op(self, _, visited_children):
         operation, _, target = visited_children
-        return (operation.text, target)
+        return operation.text, target
 
     def visit_stop(self, _, __):
         return ("stop",)
+
+    def visit_halt(self, node, visited_children):
+        operation, _, status_code = visited_children
+        return operation.text, status_code
 
     def visit_value(self, _, visited_children):
         return visited_children[0]
@@ -77,16 +81,16 @@ class ImperivmVisitor(NodeVisitor):
 
     def visit_string(self, _, visited_children):
         _, content, _ = visited_children
-        return ("string", content.text)
+        return "string", content.text
 
     def visit_integer(self, node, _):
-        return ("integer", int(node.text))
+        return "integer", int(node.text)
 
     def visit_float(self, node, _):
-        return ("float", float(node.text))
+        return "float", float(node.text)
 
     def visit_identifier(self, node, _):
-        return ("id", node.text)
+        return "id", node.text
 
     def generic_visit(self, node, visited_children):
         """The generic visit method."""
