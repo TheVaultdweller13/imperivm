@@ -63,6 +63,8 @@ class ImperivmExecutor:
                 stop = self.execute_block(block, child_bindings)
                 if stop:
                     return True
+        elif operation == 'exit':
+            exit(self.resolve_value(rest[0], bindings))
         elif operation == "print":
             print(self.resolve_value(rest[0], bindings))
         elif operation == "push":
