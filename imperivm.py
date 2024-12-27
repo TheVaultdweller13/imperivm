@@ -208,7 +208,7 @@ class ImperivmExecutor:
             self.assign_value(bindings, target, result)
         elif operation == "invocation":
             _, subroutine = rest[0]
-            self.execute_block(self.subroutines[subroutine], {})
+            self.invoke_subroutine(subroutine, {})
         else:
             print("error", operation)
 
@@ -242,8 +242,13 @@ class ImperivmExecutor:
         else:
             bindings[name] = value
 
+    def invoke_subroutine(self, name, bindings):
+        if "main" not in self.subroutines:
+            raise UnknownSubroutine(f"No nubroutine called {name}")
+        self.execute_block(self.subroutines[name], bindings)
+
     def run(self):
-        self.execute_block(self.subroutines["main"], {})
+        self.invoke_subroutine("main", {})
 
 
 if __name__ == "__main__":
@@ -261,4 +266,8 @@ if __name__ == "__main__":
 
 
 class UnknownNameException(Exception):
+    pass
+
+
+class UnknownSubroutine(Exception):
     pass
