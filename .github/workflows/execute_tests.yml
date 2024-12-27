@@ -26,4 +26,4 @@ jobs:
         run: pipenv install
 
       - name: Execute tests
-        run: pipenv run testgit
+        run: pipenv run test
