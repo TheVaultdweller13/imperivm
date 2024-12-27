@@ -6,11 +6,12 @@ for t in tests/*.imp
   do
     echo "Running test $t"
     if ./imperivm "$t"; then
-      echo "OK"
+      echo -e "\e[32mOK\e[0m"
     else
       failed=1
-      echo "KO"
+      echo -e "\e[31mKO\e[0m"
     fi
+
 
   done
 exit $failed
