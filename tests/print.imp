@@ -1,0 +1,4 @@
+main
+    begin
+        print "Salve, mundus!"
+    end
