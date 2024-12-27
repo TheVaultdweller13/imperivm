@@ -10,3 +10,6 @@ parsimonious = "*"
 
 [requires]
 python_version = "3.12"
+
+[scripts]
+test = "./test.sh"
