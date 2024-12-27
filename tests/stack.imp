@@ -1,0 +1,7 @@
+main
+    begin
+        push 0
+        pop x
+        exit x
+        exit 1
+    end

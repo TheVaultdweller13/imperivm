@@ -40,7 +40,7 @@ class ImperivmExecutor:
             value, (_, target) = rest
             old = bindings.resolve(target)
             current = self.resolve_value(value, bindings)
-            bindings.assign(target, old / current)
+            bindings.assign(target, old // current)
         elif operation == "if":
             for index in range(0, len(rest) - 1, 2):
                 condition = rest[index]

@@ -1,0 +1,7 @@
+main
+    begin
+        assign 5 x
+        subtract 5 x
+        exit x
+        exit 1
+    end

@@ -20,8 +20,8 @@ imperivm = Grammar(
 
     identifier      = !reserved ~r"[a-z][a-z0-9_]*"i
     
-    integer         = ~r"0|([1-9][0-9]*)"
-    float           = ~r"(0|([1-9][0-9]*))\.[0-9]+"
+    integer         = ~r"-?(0|([1-9][0-9]*))"
+    float           = ~r"-?(0|([1-9][0-9]*))\.[0-9]+"
     string          = quote string_text quote
 
     quote           = "\""

@@ -1,0 +1,12 @@
+main
+    begin
+        assign 0 x
+        if x
+            begin
+                exit 1
+            end
+        else
+            begin
+                exit 0
+            end
+    end
