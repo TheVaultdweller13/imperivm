@@ -186,8 +186,6 @@ class ImperivmExecutor:
             old = self.resolve_id(target, bindings)
             current = self.resolve_value(value, bindings)
             self.assign_value(bindings, target, old / current)
-
-            bindings[target] /= current
         elif operation == "if":
             print(operation)
         elif operation == "while":
