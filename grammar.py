@@ -5,7 +5,7 @@ imperivm = Grammar(
     program         = subroutine (sp_0n br ws_0n subroutine)* ws_0n
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
-    instruction     = assignment / conditional / loop / stack_op / arithmetic_op / io_op / stop / invocation
+    instruction     = assignment / conditional / loop / stack_op / arithmetic_op / io_op / stop / identifier
 
     assignment      = assign sp_1n value sp_1n identifier
     conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
@@ -13,7 +13,6 @@ imperivm = Grammar(
     stack_op        = (push sp_1n value) / (pop sp_1n identifier)
     arithmetic_op   = (add / subtract / multiply / divide) sp_1n value sp_1n identifier
     io_op           = print sp_1n value
-    invocation      = identifier
 
     value           = identifier / literal
     literal         = integer / float / string

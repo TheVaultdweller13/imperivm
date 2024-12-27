@@ -69,7 +69,7 @@ class ImperivmExecutor:
             _, subroutine = rest[0]
             self.invoke_subroutine(subroutine, {})
         else:
-            print("error", operation)
+            print("error", instruction)
 
     def resolve_value(self, value, bindings: dict):
         kind, content = value
