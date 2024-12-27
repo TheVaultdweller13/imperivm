@@ -18,9 +18,9 @@ class ImperivmExecutor:
 
     def execute_block(self, block, bindings):
         for instruction in block:
-            if instruction[0] == "stop":
-                break
-            self.execute_instruction(instruction, bindings)
+            stop = self.execute_instruction(instruction, bindings)
+            if stop:
+                return True
 
     def execute_instruction(self, instruction, bindings):
         operation, *rest = instruction
@@ -52,20 +52,21 @@ class ImperivmExecutor:
 
                 if self.resolve_value(condition, bindings):
                     child_bindings = self.inherit_bindings(bindings)
-                    self.execute_block(block, child_bindings)
-                    return
+                    return self.execute_block(block, child_bindings)
 
             # odd numbered lists have an else, execute it if everything else failed
             if len(rest) % 2:
                 block = rest[-1]
-                child_bindings = self.inherit_bindingexecute_instructions(bindings)
-                self.execute_block(block, child_bindings)
+                child_bindings = self.inherit_bindings(bindings)
+                return self.execute_block(block, child_bindings)
 
         elif operation == "while":
             condition, block = rest
             while self.resolve_value(condition, bindings):
                 child_bindings = self.inherit_bindings(bindings)
-                self.execute_block(block, child_bindings)
+                stop = self.execute_block(block, child_bindings)
+                if stop:
+                    return True
         elif operation == "print":
             print(self.resolve_value(rest[0], bindings))
         elif operation == "push":
@@ -82,8 +83,12 @@ class ImperivmExecutor:
         elif operation == "invocation":
             _, subroutine = rest[0]
             self.invoke_subroutine(subroutine, {})
+        elif operation == "stop":
+            return True
         else:
             print("error", instruction)
+
+        return False
 
     def resolve_value(self, value, bindings: dict):
         kind, content = value
