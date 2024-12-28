@@ -4,11 +4,14 @@ from bindings import Bindings
 class UnknownSubroutine(Exception):
     pass
 
+class InvalidMemoryAddressException(Exception):
+    pass
 
 class ImperivmExecutor:
     def __init__(self, ast):
         self.subroutines = {}
         self.stack = []
+        self.heap = []
         for _, (_, identifier), block in ast:
             self.subroutines[identifier] = block
 
@@ -83,6 +86,30 @@ class ImperivmExecutor:
             self.invoke_subroutine(subroutine, Bindings())
         elif operation == "stop":
             return True
+        elif operation == "store":
+            while len(self.stack) >= 2:
+                pos = self.stack.pop()
+                value = self.stack.pop()
+
+                if pos < 0:
+                    raise InvalidMemoryAddressException(f"Invalid position {pos}")
+
+                if pos >= len(self.heap):
+                    self.heap.extend([None] * (pos - len(self.heap) + 1))
+
+                self.heap[pos] = value
+        elif operation == "load":
+            temp_positions = []
+            while len(self.stack) > 0:
+                pos = self.stack.pop()
+                temp_positions.append(pos)
+
+            for pos in reversed(temp_positions):
+                if pos < 0 or pos >= len(self.heap):
+                    raise InvalidMemoryAddressException(f"Invalid memory access at position: {pos}")
+
+                value = self.heap[pos]
+                self.stack.append(value)
         else:
             print("error", instruction)
 

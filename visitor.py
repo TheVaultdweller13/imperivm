@@ -14,6 +14,12 @@ class ImperivmVisitor(NodeVisitor):
         identifier, _, block = visited_children
         return "subroutine", identifier, block
 
+    def visit_store(self, _, __):
+        return ("store",)
+
+    def visit_load(self, _, __):
+        return ("load",)
+
     def visit_block(self, _, visited_children):
         _, _, instructions, _, _ = visited_children
         [child] = instructions
