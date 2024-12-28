@@ -1,0 +1,17 @@
+main begin
+    push 5
+    push 0
+    push 8
+    push 1
+    push 9
+    push 2
+    store
+
+    push 0
+    push 1
+    push 2
+    load
+
+    pop x
+    print x
+end
