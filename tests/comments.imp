@@ -1,0 +1,9 @@
+# PROGRAM
+main # MAIN SUBROUTINE
+    # BEGIN BLOCK
+    begin
+        # PRINT A HELLO WORLD... IN LATIN
+        print "Salve, mundus!"
+        # AND THIS IS THE END
+    end
+# YES, THE END
