@@ -23,8 +23,8 @@ class ImperivmParser:
         self.visitor = visitor
 
     def parse(self, program):
-        output_str = PreProcessor.remove_comments(program)
-        tree = self.grammar.parse(output_str)
+        program = PreProcessor.remove_comments(program)
+        tree = self.grammar.parse(program)
         return self.visitor.visit(tree)
 
 
