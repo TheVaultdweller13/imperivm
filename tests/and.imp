@@ -1,0 +1,9 @@
+main begin
+  assign 1 x
+  push 2
+  and x
+  
+  if x do
+    exit 1
+  end
+end

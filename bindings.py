@@ -10,7 +10,7 @@ class Bindings:
     def inherit(self):
         return Bindings(self)
 
-    def resolve(self, name):
+    def resolve(self, name: str):
         if name not in self.names:
             if not self.parent:
                 raise UnboundNameException(f"Unbound name {name}")

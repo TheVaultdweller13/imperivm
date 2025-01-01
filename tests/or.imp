@@ -1,0 +1,11 @@
+main begin
+  assign 1 x
+  push 2
+  or x
+
+  subtract 3 x
+  
+  if x do
+    exit 1
+  end
+end

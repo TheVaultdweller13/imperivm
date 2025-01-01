@@ -4,8 +4,10 @@ from bindings import Bindings
 class UnknownSubroutine(Exception):
     pass
 
+
 class InvalidMemoryAddressException(Exception):
     pass
+
 
 class ImperivmExecutor:
     def __init__(self, ast):
@@ -44,6 +46,29 @@ class ImperivmExecutor:
             old = bindings.resolve(target)
             current = self.resolve_value(value, bindings)
             bindings.assign(target, old // current)
+        elif operation == "and":
+            ((_, target),) = rest
+            argument = self.stack.pop()
+            old = bindings.resolve(target)
+            bindings.assign(target, old & argument)
+        elif operation == "or":
+            ((_, target),) = rest
+            argument = self.stack.pop()
+            old = bindings.resolve(target)
+            bindings.assign(target, old | argument)
+        elif operation == "xor":
+            ((_, target),) = rest
+            argument = self.stack.pop()
+            old = bindings.resolve(target)
+            bindings.assign(target, old ^ argument)
+        elif operation == "negate":
+            ((_, target),) = rest
+            old = bindings.resolve(target)
+            bindings.assign(target, ~old)
+        elif operation == "not":
+            ((_, target),) = rest
+            old = bindings.resolve(target)
+            bindings.assign(target, 0 if old else old)
         elif operation == "if":
             for index in range(0, len(rest) - 1, 2):
                 condition = rest[index]
@@ -66,7 +91,7 @@ class ImperivmExecutor:
                 stop = self.execute_block(block, child_bindings)
                 if stop:
                     return True
-        elif operation == 'exit':
+        elif operation == "exit":
             exit(self.resolve_value(rest[0], bindings))
         elif operation == "print":
             print(self.resolve_value(rest[0], bindings))
@@ -106,7 +131,9 @@ class ImperivmExecutor:
 
             for pos in reversed(temp_positions):
                 if pos < 0 or pos >= len(self.heap):
-                    raise InvalidMemoryAddressException(f"Invalid memory access at position: {pos}")
+                    raise InvalidMemoryAddressException(
+                        f"Invalid memory access at position: {pos}"
+                    )
 
                 value = self.heap[pos]
                 self.stack.append(value)
