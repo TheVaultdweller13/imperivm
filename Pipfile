@@ -10,3 +10,6 @@ parsimonious = "*"
 
 [requires]
 python_version = "3.12"
+
+[scripts]
+test = "python run_tests.py"
