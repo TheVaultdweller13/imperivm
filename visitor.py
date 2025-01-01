@@ -68,6 +68,10 @@ class ImperivmVisitor(NodeVisitor):
         [operation], _, value, _, target = visited_children
         return operation.text, value, target
 
+    def visit_boolean_op(self, _, visited_children):
+        [operation], _, target = visited_children
+        return operation.text, target
+
     def visit_io_op(self, _, visited_children):
         operation, _, target = visited_children
         return operation.text, target

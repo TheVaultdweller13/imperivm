@@ -5,13 +5,14 @@ imperivm = Grammar(
     program         = subroutine (sp_0n br ws_0n subroutine)* ws_0n
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
-    instruction     = assignment / conditional / loop / stack_op / arithmetic_op / io_op / stop / identifier / halt / store / load
+    instruction     = assignment / conditional / loop / stack_op / arithmetic_op / boolean_op / io_op / stop / identifier / halt / store / load
 
     assignment      = assign sp_1n value sp_1n identifier
     conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
     loop            = while sp_1n value ws_1n block
     stack_op        = (push sp_1n value) / (pop sp_1n identifier)
     arithmetic_op   = (add / subtract / multiply / divide) sp_1n value sp_1n identifier
+    boolean_op      = (and / or / xor / negate / not) sp_1n identifier
     io_op           = print sp_1n value
     halt            = exit sp_1n value
 
@@ -33,7 +34,9 @@ imperivm = Grammar(
     sp_0n           = ~r"[ \t]*"
     sp_1n           = ~r"[ \t]+"
 
-    reserved        = begin / end / stop / if / elif / else / while / push / pop / assign / add / subtract / multiply / divide / print / exit / store / load
+    reserved        = begin / end / stop / if / elif / else / while / push
+                        / pop / assign / add / subtract / multiply / divide
+                        / and / or / xor / not / print / exit / store / load
     begin           = ~r"begin"i / ~r"do"i
     exit            = ~r"exit"i
     end             = ~r"end"i
@@ -49,6 +52,11 @@ imperivm = Grammar(
     subtract        = ~r"subtract"i
     multiply        = ~r"multiply"i
     divide          = ~r"divide"i
+    and             = ~r"and"i
+    or              = ~r"or"i
+    xor             = ~"xor"i
+    negate          = ~r"negate"i
+    not             = ~"not"i
     print           = ~r"print"i
     store           = ~r"store"i
     load            = ~r"load"i
