@@ -2,28 +2,50 @@
 import argparse
 import pprint
 import re
+from abc import abstractmethod
+from typing import override
 
 import grammar
 import visitor
 
-class PreProcessor:
-    @staticmethod
-    def remove_comments(program: str):
+
+class Preprocessor:
+    @abstractmethod
+    def process(self, program: str):
+        pass
+
+
+class CommentsPreprocessor(Preprocessor):
+
+    @override
+    def process(self, program: str):
         lines = program.splitlines()
         cleaned_lines = []
         for line in lines:
-            cleaned_line = re.sub(r'#.*$', '', line).strip()
+            cleaned_line = re.sub(r'#.*$', '', line)
             if cleaned_line:
                 cleaned_lines.append(cleaned_line)
         return "\n".join(cleaned_lines)
+
+
+class PreprocessorPipeline:
+    def __init__(self, preprocessor_actions ):
+        self.preprocessor_actions = preprocessor_actions
+
+    def process(self, program: str):
+        for action in self.preprocessor_actions:
+            program = action.process(program)
+        return program
+
 
 class ImperivmParser:
     def __init__(self, grammar=grammar.imperivm, visitor=visitor.ImperivmVisitor()):
         self.grammar = grammar
         self.visitor = visitor
+        self.preprocessor = PreprocessorPipeline([CommentsPreprocessor()])
 
     def parse(self, program):
-        program = PreProcessor.remove_comments(program)
+        program = self.preprocessor.process(program)
         tree = self.grammar.parse(program)
         return self.visitor.visit(tree)
 
