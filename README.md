@@ -8,7 +8,7 @@ describes the language's features, syntax, and usage.
 - **Memory Operations**: Memory management is handled using a stack (`push`, `pop`) and a heap (`store`, `load`)
 - **Control Flow**: Conditional branching (`if`, `elif`, `else`) and loops (`while`).
 - **Arithmetic Operations**: Basic operations like addition, subtraction, multiplication, and division.
-- **Boolean Operations**: Basic boolean operations (`and`, `or`, `xor`,`not`, `negate`)
+- **Logic Operations**: Basic logic operations (`and`, `or`, `xor`,`not`, `negate`)
 - **Variables**: Assign and use named variables.
 - **Input/Output**: Print strings or variable values.
 - **Modularity**: Define subroutines for reusable code.
