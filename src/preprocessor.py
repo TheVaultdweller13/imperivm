@@ -17,8 +17,8 @@ class CommentsPreprocessor(Preprocessor):
 
 
 class PipelinePreprocessor(Preprocessor):
-    def __init__(self, preprocessors: List[Preprocessor]):
-        self.preprocessor_actions = preprocessors
+    def __init__(self, preprocessor_actions: List[Preprocessor]):
+        self.preprocessor_actions = preprocessor_actions
 
     @override
     def process(self, program: str):
