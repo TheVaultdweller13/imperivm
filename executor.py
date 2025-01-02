@@ -23,120 +23,172 @@ class ImperivmExecutor:
             if stop:
                 return True
 
-    def execute_instruction(self, instruction, bindings: Bindings):
-        operation, *rest = instruction
+    def instruction_add(self, args, bindings):
+        value, (_, target) = args
+        old = bindings.resolve(target)
+        current = self.resolve_value(value, bindings)
+        bindings.assign(target, old + current)
 
-        if operation == "add":
-            value, (_, target) = rest
-            old = bindings.resolve(target)
-            current = self.resolve_value(value, bindings)
-            bindings.assign(target, old + current)
-        elif operation == "subtract":
-            value, (_, target) = rest
-            old = bindings.resolve(target)
-            current = self.resolve_value(value, bindings)
-            bindings.assign(target, old - current)
-        elif operation == "multiply":
-            value, (_, target) = rest
-            old = bindings.resolve(target)
-            current = self.resolve_value(value, bindings)
-            bindings.assign(target, old * current)
-        elif operation == "divide":
-            value, (_, target) = rest
-            old = bindings.resolve(target)
-            current = self.resolve_value(value, bindings)
-            bindings.assign(target, old // current)
-        elif operation == "and":
-            ((_, target),) = rest
-            argument = self.stack.pop()
-            old = bindings.resolve(target)
-            bindings.assign(target, old & argument)
-        elif operation == "or":
-            ((_, target),) = rest
-            argument = self.stack.pop()
-            old = bindings.resolve(target)
-            bindings.assign(target, old | argument)
-        elif operation == "xor":
-            ((_, target),) = rest
-            argument = self.stack.pop()
-            old = bindings.resolve(target)
-            bindings.assign(target, old ^ argument)
-        elif operation == "negate":
-            ((_, target),) = rest
-            old = bindings.resolve(target)
-            bindings.assign(target, ~old)
-        elif operation == "not":
-            ((_, target),) = rest
-            old = bindings.resolve(target)
-            bindings.assign(target, 0 if old else old)
-        elif operation == "if":
-            for index in range(0, len(rest) - 1, 2):
-                condition = rest[index]
-                block = rest[index + 1]
+    def instruction_subtract(self, args, bindings):
+        value, (_, target) = args
+        old = bindings.resolve(target)
+        current = self.resolve_value(value, bindings)
+        bindings.assign(target, old - current)
 
-                if self.resolve_value(condition, bindings):
-                    child_bindings = bindings.inherit()
-                    return self.execute_block(block, child_bindings)
+    def instruction_multiply(self, args, bindings):
+        value, (_, target) = args
+        old = bindings.resolve(target)
+        current = self.resolve_value(value, bindings)
+        bindings.assign(target, old * current)
 
-            # odd numbered lists have an else, execute it if everything else failed
-            if len(rest) % 2:
-                block = rest[-1]
+    def instruction_divide(self, args, bindings):
+        value, (_, target) = args
+        old = bindings.resolve(target)
+        current = self.resolve_value(value, bindings)
+        bindings.assign(target, old // current)
+
+    def instruction_and(self, args, bindings):
+        ((_, target),) = args
+        argument = self.stack.pop()
+        old = bindings.resolve(target)
+        bindings.assign(target, old & argument)
+
+    def instruction_or(self, args, bindings):
+        ((_, target),) = args
+        argument = self.stack.pop()
+        old = bindings.resolve(target)
+        bindings.assign(target, old | argument)
+
+    def instruction_xor(self, args, bindings):
+        ((_, target),) = args
+        argument = self.stack.pop()
+        old = bindings.resolve(target)
+        bindings.assign(target, old ^ argument)
+
+    def instruction_negate(self, args, bindings):
+        ((_, target),) = args
+        old = bindings.resolve(target)
+        bindings.assign(target, ~old)
+
+    def instruction_not(self, args, bindings):
+        ((_, target),) = args
+        old = bindings.resolve(target)
+        bindings.assign(target, 0 if old else old)
+
+    def instruction_if(self, args, bindings):
+        for index in range(0, len(args) - 1, 2):
+            condition = args[index]
+            block = args[index + 1]
+
+            if self.resolve_value(condition, bindings):
                 child_bindings = bindings.inherit()
                 return self.execute_block(block, child_bindings)
 
-        elif operation == "while":
-            condition, block = rest
-            while self.resolve_value(condition, bindings):
-                child_bindings = bindings.inherit()
-                stop = self.execute_block(block, child_bindings)
-                if stop:
-                    return True
-        elif operation == "exit":
-            exit(self.resolve_value(rest[0], bindings))
-        elif operation == "print":
-            print(self.resolve_value(rest[0], bindings))
-        elif operation == "push":
-            value = self.resolve_value(rest[0], bindings)
-            self.stack.append(value)
-        elif operation == "pop":
-            _, target = rest[0]
+        # odd numbered lists have an else, execute it if everything else failed
+        if len(args) % 2:
+            block = args[-1]
+            child_bindings = bindings.inherit()
+            return self.execute_block(block, child_bindings)
+
+    def instruction_while(self, args, bindings):
+        condition, block = args
+        while self.resolve_value(condition, bindings):
+            child_bindings = bindings.inherit()
+            stop = self.execute_block(block, child_bindings)
+            if stop:
+                return True
+
+        return False
+
+    def instruction_push(self, args, bindings):
+        value = self.resolve_value(args[0], bindings)
+        self.stack.append(value)
+
+    def instruction_pop(self, args, bindings):
+        _, target = args[0]
+        value = self.stack.pop()
+        bindings.assign(target, value)
+
+    def instruction_assign(self, args, bindings):
+        value, (_, target) = args
+        result = self.resolve_value(value, bindings)
+        bindings.assign(target, result)
+
+    def instruction_invocation(self, args):
+        _, subroutine = args[0]
+        self.invoke_subroutine(subroutine, Bindings())
+
+    def instruction_store(self):
+        while len(self.stack) >= 2:
+            pos = self.stack.pop()
             value = self.stack.pop()
-            bindings.assign(target, value)
+
+            if pos < 0:
+                raise InvalidMemoryAddressException(f"Invalid position {pos}")
+
+            if pos >= len(self.heap):
+                self.heap.extend([None] * (pos - len(self.heap) + 1))
+
+            self.heap[pos] = value
+
+    def instruction_load(self):
+        temp_positions = []
+        while len(self.stack) > 0:
+            pos = self.stack.pop()
+            temp_positions.append(pos)
+
+        for pos in reversed(temp_positions):
+            if pos < 0 or pos >= len(self.heap):
+                raise InvalidMemoryAddressException(
+                    f"Invalid memory access at position: {pos}"
+                )
+
+            value = self.heap[pos]
+            self.stack.append(value)
+
+    def execute_instruction(self, instruction, bindings: Bindings):
+        operation, *args = instruction
+
+        if operation == "add":
+            self.instruction_add(args, bindings)
+        elif operation == "subtract":
+            self.instruction_subtract(args, bindings)
+        elif operation == "multiply":
+            self.instruction_multiply(args, bindings)
+        elif operation == "divide":
+            self.instruction_multiply(args, bindings)
+        elif operation == "and":
+            self.instruction_and(args, bindings)
+        elif operation == "or":
+            self.instruction_or(args, bindings)
+        elif operation == "xor":
+            self.instruction_xor(args, bindings)
+        elif operation == "negate":
+            self.instruction_negate(args, bindings)
+        elif operation == "not":
+            self.instruction_not(args, bindings)
+        elif operation == "if":
+            return self.instruction_if(args, bindings)
+        elif operation == "while":
+            return self.instruction_while(args, bindings)
+        elif operation == "exit":
+            exit(self.resolve_value(args[0], bindings))
+        elif operation == "print":
+            print(self.resolve_value(args[0], bindings))
+        elif operation == "push":
+            self.instruction_push(args, bindings)
+        elif operation == "pop":
+            self.instruction_pop(args, bindings)
         elif operation == "assign":
-            value, (_, target) = rest
-            result = self.resolve_value(value, bindings)
-            bindings.assign(target, result)
+            self.instruction_assign(args, bindings)
         elif operation == "invocation":
-            _, subroutine = rest[0]
-            self.invoke_subroutine(subroutine, Bindings())
+            self.instruction_invocation(args)
         elif operation == "stop":
             return True
         elif operation == "store":
-            while len(self.stack) >= 2:
-                pos = self.stack.pop()
-                value = self.stack.pop()
-
-                if pos < 0:
-                    raise InvalidMemoryAddressException(f"Invalid position {pos}")
-
-                if pos >= len(self.heap):
-                    self.heap.extend([None] * (pos - len(self.heap) + 1))
-
-                self.heap[pos] = value
+            self.instruction_store()
         elif operation == "load":
-            temp_positions = []
-            while len(self.stack) > 0:
-                pos = self.stack.pop()
-                temp_positions.append(pos)
-
-            for pos in reversed(temp_positions):
-                if pos < 0 or pos >= len(self.heap):
-                    raise InvalidMemoryAddressException(
-                        f"Invalid memory access at position: {pos}"
-                    )
-
-                value = self.heap[pos]
-                self.stack.append(value)
+            self.instruction_load()
         else:
             print("error", instruction)
 
