@@ -5,17 +5,15 @@ imperivm = Grammar(
     program         = ws_0n subroutine (sp_0n br ws_0n subroutine)* ws_0n
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
-    instruction     = assignment / conditional / loop / stack_op
-                        / arithmetic_op / boolean_op / io_op / stop / identifier
-                        / halt / store / load
+    instruction     = assignment / conditional / loop / stack / op / io / stop
+                        / identifier / halt / store / load
 
     assignment      = let sp_1n identifier
     conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
     loop            = while sp_1n value ws_1n block
-    stack_op        = (push sp_1n value) / (pop sp_1n identifier)
-    arithmetic_op   = (add / subtract / multiply / divide) sp_1n value sp_1n identifier
-    boolean_op      = (and / or / xor / negate / not) sp_1n identifier
-    io_op           = print sp_1n value
+    stack           = (push sp_1n value) / (pop sp_1n identifier)
+    op              = (add / subtract / multiply / divide / and / or / xor / negate / not) sp_1n identifier
+    io              = print sp_1n value
     halt            = exit sp_1n value
 
     value           = identifier / literal
@@ -37,9 +35,8 @@ imperivm = Grammar(
     sp_1n           = ~r"[ \t]+"
 
     reserved        = begin / end / stop / if / elif / else / while / push
-                        / pop / let / add / subtract / multiply
-                        / divide / and / or / xor / not / print / exit / store
-                        / load
+                        / pop / let / add / subtract / multiply / divide / and
+                        / or / xor / not / print / exit / store / load
     begin           = ~r"begin"i / ~r"do"i
     exit            = ~r"exit"i
     end             = ~r"end"i

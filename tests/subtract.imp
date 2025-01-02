@@ -2,7 +2,8 @@ main
     begin
         push 5
         let x
-        subtract 5 x
+        push 5
+        subtract x
         exit x
         exit 1
     end

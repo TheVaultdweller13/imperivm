@@ -38,9 +38,7 @@ class ImperivmVisitor(NodeVisitor):
         return instruction.text, target
 
     def visit_conditional(self, _, visited_children):
-        operation, _, condition, _, block, elif_operations, else_operations = (
-            visited_children
-        )
+        operation, _, condition, _, block, elif_operations, else_operations = visited_children
 
         elif_tree = []
         if type(elif_operations) is list:
@@ -59,20 +57,16 @@ class ImperivmVisitor(NodeVisitor):
         operation, _, condition, _, block = visited_children
         return operation.text, condition, block
 
-    def visit_stack_op(self, _, visited_children):
+    def visit_stack(self, _, visited_children):
         [child] = visited_children
         operation, _, target = child
         return operation.text, target
 
-    def visit_arithmetic_op(self, _, visited_children):
-        [operation], _, value, _, target = visited_children
-        return operation.text, value, target
-
-    def visit_boolean_op(self, _, visited_children):
+    def visit_op(self, _, visited_children):
         [operation], _, target = visited_children
         return operation.text, target
 
-    def visit_io_op(self, _, visited_children):
+    def visit_io(self, _, visited_children):
         operation, _, target = visited_children
         return operation.text, target
 
@@ -103,5 +97,5 @@ class ImperivmVisitor(NodeVisitor):
         return "id", node.text
 
     def generic_visit(self, node, visited_children):
-        """The generic visit method."""
+        """the generic visit method"""
         return visited_children or node

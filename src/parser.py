@@ -2,9 +2,9 @@
 import argparse
 import pprint
 
-import grammar as grammar
-import visitor as visitor
-from preprocessor import PipelinePreprocessor, CommentsPreprocessor
+import grammar
+import visitor
+import preprocessor
 
 
 class ImperivmParser:
@@ -12,13 +12,13 @@ class ImperivmParser:
         self,
         grammar=grammar.imperivm,
         visitor=visitor.ImperivmVisitor(),
-        preprocessor=None,
+        preprocessor=preprocessor.PipelinePreprocessor(
+            [preprocessor.CommentsPreprocessor()]
+        ),
     ):
         self.grammar = grammar
         self.visitor = visitor
-        self.preprocessor = preprocessor or PipelinePreprocessor(
-            [CommentsPreprocessor()]
-        )
+        self.preprocessor = preprocessor
 
     def parse(self, program):
         program = self.preprocessor.process(program)
