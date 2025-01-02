@@ -109,11 +109,6 @@ class ImperivmExecutor:
         value = self.stack.pop()
         bindings.assign(target, value)
 
-    def instruction_assign(self, args, bindings):
-        value, (_, target) = args
-        result = self.resolve_value(value, bindings)
-        bindings.assign(target, result)
-
     def instruction_let(self, args, bindings):
         [(_, target)] = args
         value = self.stack.pop()
@@ -184,8 +179,6 @@ class ImperivmExecutor:
             self.instruction_push(args, bindings)
         elif operation == "pop":
             self.instruction_pop(args, bindings)
-        elif operation == "assign":
-            self.instruction_assign(args, bindings)
         elif operation == "let":
             self.instruction_let(args, bindings)
         elif operation == "invocation":

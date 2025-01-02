@@ -1,5 +1,6 @@
 main begin
-  assign 1 x
+  push 1
+  let x
   negate x
 
   add 2 x

@@ -9,7 +9,7 @@ imperivm = Grammar(
                         / arithmetic_op / boolean_op / io_op / stop / identifier
                         / halt / store / load
 
-    assignment      = (assign sp_1n value sp_1n identifier) / (let sp_1n identifier)
+    assignment      = let sp_1n identifier
     conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
     loop            = while sp_1n value ws_1n block
     stack_op        = (push sp_1n value) / (pop sp_1n identifier)
@@ -37,7 +37,7 @@ imperivm = Grammar(
     sp_1n           = ~r"[ \t]+"
 
     reserved        = begin / end / stop / if / elif / else / while / push
-                        / pop / assign / let / add / subtract / multiply
+                        / pop / let / add / subtract / multiply
                         / divide / and / or / xor / not / print / exit / store
                         / load
     begin           = ~r"begin"i / ~r"do"i
@@ -50,7 +50,6 @@ imperivm = Grammar(
     while           = ~r"while"i
     push            = ~r"push"i
     pop             = ~r"pop"i
-    assign          = ~r"assign"i
     let             = ~r"let"i
     add             = ~r"add"i
     subtract        = ~r"subtract"i

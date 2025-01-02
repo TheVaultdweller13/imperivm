@@ -7,7 +7,7 @@ Imperivm is a simple, stack-based programming language with a focus on clarity a
 - **Stack Operations**: Push and pop values to/from the stack.
 - **Control Flow**: Conditional branching (`if`, `elif`, `else`) and loops (`while`).
 - **Arithmetic Operations**: Basic operations like addition, subtraction, multiplication, and division.
-- **Variables**: Assign and use named variables.
+- **Variables**: Assign and use named variables (`let`).
 - **Input/Output**: Print strings or variable values.
 - **Modularity**: Define subroutines for reusable code.
 
@@ -39,7 +39,8 @@ Instructions include variable assignment, stack operations, arithmetic operation
 #### Variable Assignment
 Assign a value to a variable:
 ```imperivm
-assign 42 x
+push 42
+let x
 ```
 
 #### Stack Operations

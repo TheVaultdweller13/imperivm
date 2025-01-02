@@ -1,6 +1,0 @@
-main
-    begin
-        assign 0 x
-        exit x
-        exit 1
-    end
