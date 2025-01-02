@@ -1,6 +1,7 @@
 main
     begin
-        assign 84781 x
+        push 84781
+        let x
         multiply 0 x
         exit x
         exit 1

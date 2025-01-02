@@ -34,8 +34,8 @@ class ImperivmVisitor(NodeVisitor):
         return visited_children
 
     def visit_assignment(self, _, visited_children):
-        instruction, _, value, _, target = visited_children
-        return instruction.text, value, target
+        instruction, _, target = visited_children
+        return instruction.text, target
 
     def visit_conditional(self, _, visited_children):
         operation, _, condition, _, block, elif_operations, else_operations = (
