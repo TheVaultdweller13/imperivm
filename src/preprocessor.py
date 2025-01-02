@@ -5,14 +5,16 @@ from typing import override, List
 
 class Preprocessor(ABC):
     @abstractmethod
-    def process(self, program: str) -> str:
+    def process(self, program: str):
         pass
 
 
 class CommentsPreprocessor(Preprocessor):
     @override
     def process(self, program: str):
-        cleaned_program = map(lambda line: re.sub(r"#.*$", "", line), program.splitlines())
+        cleaned_program = map(
+            lambda line: re.sub(r"#.*$", "", line), program.splitlines()
+        )
         return "\n".join(cleaned_program)
 
 

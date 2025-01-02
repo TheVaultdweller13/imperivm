@@ -2,7 +2,8 @@ main
     begin
         push 84781
         let x
-        multiply 0 x
+        push 0
+        multiply x
         exit x
         exit 1
     end

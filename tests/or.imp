@@ -4,7 +4,8 @@ main begin
   push 2
   or x
 
-  subtract 3 x
+  push 3
+  subtract x
   
   if x do
     exit 1

@@ -4,7 +4,8 @@ main begin
   push 3
   xor x
 
-  subtract 2 x
+  push 2
+  subtract x
   
   if x do
     exit 1

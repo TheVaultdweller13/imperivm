@@ -24,27 +24,27 @@ class ImperivmExecutor:
                 return True
 
     def instruction_add(self, args, bindings):
-        value, (_, target) = args
+        ((_, target),) = args
+        current = self.stack.pop()
         old = bindings.resolve(target)
-        current = self.resolve_value(value, bindings)
         bindings.assign(target, old + current)
 
     def instruction_subtract(self, args, bindings):
-        value, (_, target) = args
+        ((_, target),) = args
+        current = self.stack.pop()
         old = bindings.resolve(target)
-        current = self.resolve_value(value, bindings)
         bindings.assign(target, old - current)
 
     def instruction_multiply(self, args, bindings):
-        value, (_, target) = args
+        ((_, target),) = args
+        current = self.stack.pop()
         old = bindings.resolve(target)
-        current = self.resolve_value(value, bindings)
         bindings.assign(target, old * current)
 
     def instruction_divide(self, args, bindings):
-        value, (_, target) = args
+        ((_, target),) = args
+        current = self.stack.pop()
         old = bindings.resolve(target)
-        current = self.resolve_value(value, bindings)
         bindings.assign(target, old // current)
 
     def instruction_and(self, args, bindings):
@@ -139,9 +139,7 @@ class ImperivmExecutor:
 
         for pos in reversed(temp_positions):
             if pos < 0 or pos >= len(self.heap):
-                raise InvalidMemoryAddressException(
-                    f"Invalid memory access at position: {pos}"
-                )
+                raise InvalidMemoryAddressException(f"Invalid memory access at position: {pos}")
 
             value = self.heap[pos]
             self.stack.append(value)

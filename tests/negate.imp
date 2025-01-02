@@ -3,7 +3,8 @@ main begin
   let x
   negate x
 
-  add 2 x
+  push 2
+  add x
   
   if x do
     exit 1
