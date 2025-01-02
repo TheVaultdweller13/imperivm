@@ -1,6 +1,7 @@
 main
     begin
-        assign 1 x
+        push 1
+        let x
         if x
             begin
                 exit 0

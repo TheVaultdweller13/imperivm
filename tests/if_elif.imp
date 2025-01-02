@@ -1,7 +1,9 @@
 main
     begin
-        assign 0 x
-        assign 1 y
+        push 0
+        let x
+        push 1
+        let y
         if x
             begin
                 exit 1

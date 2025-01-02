@@ -1,6 +1,7 @@
 main
     begin
-        assign 0 x
+        push 0
+        let x
         divide 14884 x
         exit x
         exit 1
