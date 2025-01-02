@@ -12,6 +12,7 @@ describes the language's features, syntax, and usage.
 - **Variables**: Assign and use named variables.
 - **Input/Output**: Print strings or variable values.
 - **Modularity**: Define subroutines for reusable code.
+- **Comments**: Supports comments anywhere in the code using `#`
 
 ## Syntax Overview
 
