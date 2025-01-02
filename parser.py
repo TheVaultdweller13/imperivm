@@ -34,10 +34,10 @@ class PipelinePreprocessor(Preprocessor):
 
 
 class ImperivmParser:
-    def __init__(self, grammar=grammar.imperivm, visitor=visitor.ImperivmVisitor()):
+    def __init__(self, grammar=grammar.imperivm, visitor=visitor.ImperivmVisitor(), preprocessor = None):
         self.grammar = grammar
         self.visitor = visitor
-        self.preprocessor = PipelinePreprocessor([CommentsPreprocessor()])
+        self.preprocessor = preprocessor or PipelinePreprocessor([CommentsPreprocessor()])
 
     def parse(self, program):
         program = self.preprocessor.process(program)
