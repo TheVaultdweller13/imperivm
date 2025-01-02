@@ -79,7 +79,6 @@ load       # Loads the value from address 0 in the heap back onto the stack
 ```
 
 In summary, Imperivm uses the stack for temporary, local storage and the heap for dynamic, addressable memory storage.
-This dual mechanism supports efficient memory management while keeping the language's operations simple and intuitive.
 
 #### Arithmetic Operations
 
