@@ -1,8 +1,8 @@
 #!/bin/env python
 
 import argparse
-import parser
-import executor
+import parser as parser
+import executor as executor
 
 
 if __name__ == "__main__":

@@ -5,8 +5,8 @@ import re
 from abc import abstractmethod
 from typing import override
 
-import grammar
-import visitor
+import grammar as grammar
+import visitor as visitor
 
 
 class Preprocessor:
@@ -16,14 +16,16 @@ class Preprocessor:
 
 
 class CommentsPreprocessor(Preprocessor):
-
     @override
     def process(self, program: str):
-        cleaned_program = map(lambda line: re.sub(r'#.*$', '', line), program.splitlines())
+        cleaned_program = map(
+            lambda line: re.sub(r"#.*$", "", line), program.splitlines()
+        )
         return "\n".join(cleaned_program)
 
+
 class PipelinePreprocessor(Preprocessor):
-    def __init__(self, preprocessor_actions ):
+    def __init__(self, preprocessor_actions):
         self.preprocessor_actions = preprocessor_actions
 
     @override
@@ -34,10 +36,17 @@ class PipelinePreprocessor(Preprocessor):
 
 
 class ImperivmParser:
-    def __init__(self, grammar=grammar.imperivm, visitor=visitor.ImperivmVisitor(), preprocessor = None):
+    def __init__(
+        self,
+        grammar=grammar.imperivm,
+        visitor=visitor.ImperivmVisitor(),
+        preprocessor=None,
+    ):
         self.grammar = grammar
         self.visitor = visitor
-        self.preprocessor = preprocessor or PipelinePreprocessor([CommentsPreprocessor()])
+        self.preprocessor = preprocessor or PipelinePreprocessor(
+            [CommentsPreprocessor()]
+        )
 
     def parse(self, program):
         program = self.preprocessor.process(program)
