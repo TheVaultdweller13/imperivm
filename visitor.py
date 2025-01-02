@@ -5,7 +5,7 @@ class ImperivmVisitor(NodeVisitor):
     def visit_program(self, _, visited_children):
         _, first, rest, _ = visited_children
         subroutines = [first]
-        for _, _, _, subroutine in rest:
+        for *_, subroutine in rest:
             subroutines.append(subroutine)
 
         return tuple(subroutines)
