@@ -1,38 +1,10 @@
 #!/bin/env python
 import argparse
 import pprint
-import re
-from abc import abstractmethod
-from typing import override
 
 import grammar as grammar
 import visitor as visitor
-
-
-class Preprocessor:
-    @abstractmethod
-    def process(self, program: str):
-        pass
-
-
-class CommentsPreprocessor(Preprocessor):
-    @override
-    def process(self, program: str):
-        cleaned_program = map(
-            lambda line: re.sub(r"#.*$", "", line), program.splitlines()
-        )
-        return "\n".join(cleaned_program)
-
-
-class PipelinePreprocessor(Preprocessor):
-    def __init__(self, preprocessor_actions):
-        self.preprocessor_actions = preprocessor_actions
-
-    @override
-    def process(self, program: str):
-        for action in self.preprocessor_actions:
-            program = action.process(program)
-        return program
+from preprocessor import PipelinePreprocessor, CommentsPreprocessor
 
 
 class ImperivmParser:
