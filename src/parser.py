@@ -12,9 +12,7 @@ class ImperivmParser:
         self,
         grammar=grammar.imperivm,
         visitor=visitor.ImperivmVisitor(),
-        preprocessor=preprocessor.PipelinePreprocessor(
-            [preprocessor.CommentsPreprocessor()]
-        ),
+        preprocessor=preprocessor.PipelinePreprocessor([preprocessor.CommentsPreprocessor()]),
     ):
         self.grammar = grammar
         self.visitor = visitor
