@@ -5,9 +5,11 @@ imperivm = Grammar(
     program         = subroutine (sp_0n br ws_0n subroutine)* ws_0n
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
-    instruction     = assignment / conditional / loop / stack_op / arithmetic_op / boolean_op / io_op / stop / identifier / halt / store / load
+    instruction     = assignment / conditional / loop / stack_op
+                        / arithmetic_op / boolean_op / io_op / stop / identifier
+                        / halt / store / load
 
-    assignment      = assign sp_1n value sp_1n identifier
+    assignment      = (assign sp_1n value sp_1n identifier) / (let sp_1n identifier)
     conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
     loop            = while sp_1n value ws_1n block
     stack_op        = (push sp_1n value) / (pop sp_1n identifier)
@@ -35,8 +37,9 @@ imperivm = Grammar(
     sp_1n           = ~r"[ \t]+"
 
     reserved        = begin / end / stop / if / elif / else / while / push
-                        / pop / assign / add / subtract / multiply / divide
-                        / and / or / xor / not / print / exit / store / load
+                        / pop / assign / let / add / subtract / multiply
+                        / divide / and / or / xor / not / print / exit / store
+                        / load
     begin           = ~r"begin"i / ~r"do"i
     exit            = ~r"exit"i
     end             = ~r"end"i
@@ -48,15 +51,16 @@ imperivm = Grammar(
     push            = ~r"push"i
     pop             = ~r"pop"i
     assign          = ~r"assign"i
+    let             = ~r"let"i
     add             = ~r"add"i
     subtract        = ~r"subtract"i
     multiply        = ~r"multiply"i
     divide          = ~r"divide"i
     and             = ~r"and"i
     or              = ~r"or"i
-    xor             = ~"xor"i
+    xor             = ~r"xor"i
     negate          = ~r"negate"i
-    not             = ~"not"i
+    not             = ~r"not"i
     print           = ~r"print"i
     store           = ~r"store"i
     load            = ~r"load"i
