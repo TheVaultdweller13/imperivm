@@ -3,7 +3,7 @@ from parsimonious.nodes import NodeVisitor
 
 class ImperivmVisitor(NodeVisitor):
     def visit_program(self, _, visited_children):
-        first, rest, _ = visited_children
+        _, first, rest, _ = visited_children
         subroutines = [first]
         for _, _, _, subroutine in rest:
             subroutines.append(subroutine)
