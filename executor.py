@@ -114,6 +114,11 @@ class ImperivmExecutor:
         result = self.resolve_value(value, bindings)
         bindings.assign(target, result)
 
+    def instruction_let(self, args, bindings):
+        [(_, target)] = args
+        value = self.stack.pop()
+        bindings.assign(target, value)
+
     def instruction_invocation(self, args):
         _, subroutine = args[0]
         self.invoke_subroutine(subroutine, Bindings())
@@ -181,6 +186,8 @@ class ImperivmExecutor:
             self.instruction_pop(args, bindings)
         elif operation == "assign":
             self.instruction_assign(args, bindings)
+        elif operation == "let":
+            self.instruction_let(args, bindings)
         elif operation == "invocation":
             self.instruction_invocation(args)
         elif operation == "stop":

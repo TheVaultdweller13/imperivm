@@ -34,8 +34,15 @@ class ImperivmVisitor(NodeVisitor):
         return visited_children
 
     def visit_assignment(self, _, visited_children):
-        instruction, _, value, _, target = visited_children
-        return instruction.text, value, target
+        [instruction, *_] = visited_children[0]
+        if instruction.text == "assign":
+            _, _, value, _, target = visited_children[0]
+            return instruction.text, value, target
+        elif instruction.text == "let":
+            _, _, target = visited_children[0]
+            return instruction.text, target
+        else:
+            raise ValueError(f"Unknown assignment {instruction}")
 
     def visit_conditional(self, _, visited_children):
         operation, _, condition, _, block, elif_operations, else_operations = (
