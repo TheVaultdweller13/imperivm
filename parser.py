@@ -19,12 +19,9 @@ class CommentsPreprocessor(Preprocessor):
 
     @override
     def process(self, program: str):
-        lines = program.splitlines()
-        cleaned_lines = []
-        for line in lines:
-            cleaned_line = re.sub(r'#.*$', '', line)
-            if cleaned_line:
-                cleaned_lines.append(cleaned_line)
+        cleaned_lines = filter(
+            lambda cleaned_line: cleaned_line,
+            map(lambda line: re.sub(r'#.*$', '', line), program.splitlines()))
         return "\n".join(cleaned_lines)
 
 
