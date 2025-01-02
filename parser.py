@@ -19,16 +19,14 @@ class CommentsPreprocessor(Preprocessor):
 
     @override
     def process(self, program: str):
-        cleaned_lines = filter(
-            lambda cleaned_line: cleaned_line,
-            map(lambda line: re.sub(r'#.*$', '', line), program.splitlines()))
-        return "\n".join(cleaned_lines)
+        cleaned_program = map(lambda line: re.sub(r'#.*$', '', line), program.splitlines())
+        return "\n".join(cleaned_program)
 
-
-class PreprocessorPipeline:
+class PipelinePreprocessor(Preprocessor):
     def __init__(self, preprocessor_actions ):
         self.preprocessor_actions = preprocessor_actions
 
+    @override
     def process(self, program: str):
         for action in self.preprocessor_actions:
             program = action.process(program)
@@ -39,7 +37,7 @@ class ImperivmParser:
     def __init__(self, grammar=grammar.imperivm, visitor=visitor.ImperivmVisitor()):
         self.grammar = grammar
         self.visitor = visitor
-        self.preprocessor = PreprocessorPipeline([CommentsPreprocessor()])
+        self.preprocessor = PipelinePreprocessor([CommentsPreprocessor()])
 
     def parse(self, program):
         program = self.preprocessor.process(program)
