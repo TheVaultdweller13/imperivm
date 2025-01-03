@@ -10,18 +10,23 @@ def run_tests():
     failed_result = False
     test_directory = "tests"
     errors = []
+    main_class = "src/imperivm.py"
 
-    for file in os.listdir(test_directory):
-        if file.endswith(".imp"):
-            test_path = os.path.join(test_directory, file)
-            print(f"Running test {test_path}", end=" ")
-            try:
-                subprocess.run(["./imperivm", test_path], check=True, text=True, capture_output=True)
-                print(f"{GREEN}OK{RESET}")
-            except subprocess.CalledProcessError as e:
-                print(f"{RED}KO{RESET}")
-                errors.append((test_path, e.stderr))
-                failed_result = True
+    tests = [os.path.join(test_directory, file) for file in os.listdir(test_directory) if file.endswith(".imp")]
+    for test in tests:
+        print(f"Running test {test}", end=": ")
+        try:
+            subprocess.run(
+                f"python {main_class} {test}",
+                shell=True,
+                check=True,
+                text=True,
+                capture_output=True)
+            print(f"{GREEN}OK{RESET}")
+        except subprocess.CalledProcessError as e:
+            print(f"{RED}KO{RESET}")
+            errors.append((test, e.stderr))
+            failed_result = True
 
     if errors:
         print("\nErrors:")
