@@ -60,7 +60,7 @@ class ImperivmExecutor:
             if num_args:
                 return func(args, bindings) if num_args == 2 else func(args)
             else:
-                return func
+                return func()
 
     def instruction_add(self, args, bindings):
         ((_, target),) = args
