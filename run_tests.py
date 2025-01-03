@@ -14,7 +14,7 @@ def run_tests():
 
     print("Install dependencies...")
     try:
-        subprocess.run("pipenv install ")
+        subprocess.run("pipenv install")
     except:
         raise
 
