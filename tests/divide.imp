@@ -1,7 +1,7 @@
 main
     begin
         push 0
-        let x
+        pop x
         push 14884
         divide x
         exit x

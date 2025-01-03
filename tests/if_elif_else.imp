@@ -1,7 +1,7 @@
 main
     begin
         push 0
-        let x
+        pop x
         if x
             begin
                 exit 1

@@ -1,7 +1,7 @@
 main
     begin
         push -5
-        let x
+        pop x
         push 5
         add x
         exit x
