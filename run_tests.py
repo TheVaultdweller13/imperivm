@@ -12,12 +12,6 @@ def run_tests():
     errors = []
     main_class = "src/imperivm.py"
 
-    print("Install dependencies...")
-    try:
-        subprocess.run("pipenv install")
-    except:
-        raise
-
     tests = [os.path.join(test_directory, file) for file in os.listdir(test_directory) if file.endswith(".imp")]
     for test in tests:
         print(f"Running test {test}", end=": ")
