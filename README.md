@@ -76,8 +76,10 @@ In summary, Imperivm uses the stack for temporary, local storage and the heap fo
 Perform arithmetic and store the result in a variable:
 
 ```imperivm
-add 5 x
-subtract 3 y
+add x # Adds the value on the stack to the variable x
+subtract x # Subtracts the value on the stack from the variable x
+multiply x # Multiplies the value on the stack by the variable x
+divide x # Divides the value on the stack by the variable x
 ```
 
 #### Boolean Operations
