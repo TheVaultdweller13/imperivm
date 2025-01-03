@@ -1,3 +1,5 @@
+import inspect
+
 from bindings import Bindings
 
 
@@ -17,11 +19,48 @@ class ImperivmExecutor:
         for _, (_, identifier), block in ast:
             self.subroutines[identifier] = block
 
+        self.operations = {
+            "add": self.instruction_add,
+            "subtract": self.instruction_subtract,
+            "multiply": self.instruction_multiply,
+            "divide": self.instruction_divide,
+            "and": self.instruction_and,
+            "or": self.instruction_or,
+            "xor": self.instruction_xor,
+            "negate": self.instruction_negate,
+            "not": self.instruction_not,
+            "if": self.instruction_if,
+            "while": self.instruction_while,
+            "exit": lambda args, bindings: exit(self.resolve_value(args[0], bindings)),
+            "print": lambda args, bindings: print(self.resolve_value(args[0], bindings)),
+            "push": self.instruction_push,
+            "pop": self.instruction_pop,
+            "invocation": self.instruction_invocation,
+            "stop": lambda: True,
+            "store": self.instruction_store,
+            "load": self.instruction_load,
+        }
+
     def execute_block(self, block, bindings: Bindings):
         for instruction in block:
             stop = self.execute_instruction(instruction, bindings)
             if stop:
                 return True
+
+    def execute_instruction(self, instruction, bindings: Bindings):
+        operation, *args = instruction
+
+        if operation not in self.operations:
+            print("Error: invalid operation", operation)
+            return False
+
+        func = self.operations[operation]
+        num_args = len(inspect.signature(func).parameters)
+        if callable(func):
+            if num_args:
+                return func(args, bindings) if num_args == 2 else func(args)
+            else:
+                return func
 
     def instruction_add(self, args, bindings):
         ((_, target),) = args
@@ -138,52 +177,6 @@ class ImperivmExecutor:
 
             value = self.heap[pos]
             self.stack.append(value)
-
-    def execute_instruction(self, instruction, bindings: Bindings):
-        operation, *args = instruction
-
-        if operation == "add":
-            self.instruction_add(args, bindings)
-        elif operation == "subtract":
-            self.instruction_subtract(args, bindings)
-        elif operation == "multiply":
-            self.instruction_multiply(args, bindings)
-        elif operation == "divide":
-            self.instruction_multiply(args, bindings)
-        elif operation == "and":
-            self.instruction_and(args, bindings)
-        elif operation == "or":
-            self.instruction_or(args, bindings)
-        elif operation == "xor":
-            self.instruction_xor(args, bindings)
-        elif operation == "negate":
-            self.instruction_negate(args, bindings)
-        elif operation == "not":
-            self.instruction_not(args, bindings)
-        elif operation == "if":
-            return self.instruction_if(args, bindings)
-        elif operation == "while":
-            return self.instruction_while(args, bindings)
-        elif operation == "exit":
-            exit(self.resolve_value(args[0], bindings))
-        elif operation == "print":
-            print(self.resolve_value(args[0], bindings))
-        elif operation == "push":
-            self.instruction_push(args, bindings)
-        elif operation == "pop":
-            self.instruction_pop(args, bindings)
-        elif operation == "invocation":
-            self.instruction_invocation(args)
-        elif operation == "stop":
-            return True
-        elif operation == "store":
-            self.instruction_store()
-        elif operation == "load":
-            self.instruction_load()
-        else:
-            print("error", instruction)
-
-        return False
 
     def resolve_value(self, value, bindings: Bindings):
         kind, content = value
