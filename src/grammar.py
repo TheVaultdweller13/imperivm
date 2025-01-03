@@ -5,10 +5,9 @@ imperivm = Grammar(
     program         = ws_0n subroutine (sp_0n br ws_0n subroutine)* ws_0n
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
-    instruction     = assignment / conditional / loop / stack / op / io / stop
+    instruction     = conditional / loop / stack / op / io / stop
                         / identifier / halt / store / load
 
-    assignment      = let sp_1n identifier
     conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
     loop            = while sp_1n value ws_1n block
     stack           = (push sp_1n value) / (pop sp_1n identifier)
@@ -35,7 +34,7 @@ imperivm = Grammar(
     sp_1n           = ~r"[ \t]+"
 
     reserved        = begin / end / stop / if / elif / else / while / push
-                        / pop / let / add / subtract / multiply / divide / and
+                        / pop / add / subtract / multiply / divide / and
                         / or / xor / not / print / exit / store / load
     begin           = ~r"begin"i / ~r"do"i
     exit            = ~r"exit"i
@@ -47,7 +46,6 @@ imperivm = Grammar(
     while           = ~r"while"i
     push            = ~r"push"i
     pop             = ~r"pop"i
-    let             = ~r"let"i
     add             = ~r"add"i
     subtract        = ~r"subtract"i
     multiply        = ~r"multiply"i

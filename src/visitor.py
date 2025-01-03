@@ -28,14 +28,10 @@ class ImperivmVisitor(NodeVisitor):
         result.insert(0, first)
         return tuple(result)
 
-    def visit_instruction(self, node, visited_children):
+    def visit_instruction(self, _, visited_children):
         if visited_children[0][0] == "id":
             return [("invocation", visited_children[0])]
         return visited_children
-
-    def visit_assignment(self, _, visited_children):
-        instruction, _, target = visited_children
-        return instruction.text, target
 
     def visit_conditional(self, _, visited_children):
         operation, _, condition, _, block, elif_operations, else_operations = visited_children

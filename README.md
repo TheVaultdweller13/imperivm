@@ -9,7 +9,6 @@ describes the language's features, syntax, and usage.
 - **Control Flow**: Conditional branching (`if`, `elif`, `else`) and loops (`while`).
 - **Arithmetic Operations**: Basic operations like addition, subtraction, multiplication, and division.
 - **Logic Operations**: Basic logic operations (`and`, `or`, `xor`,`not`, `negate`)
-- **Variables**: Assign and use named variables (`let`).
 - **Input/Output**: Print strings or variable values.
 - **Modularity**: Define subroutines for reusable code.
 - **Comments**: Supports comments anywhere in the code using `#`
@@ -41,16 +40,7 @@ end
 
 ### Instructions
 
-Instructions include variable assignment, stack operations, arithmetic operations, and control flow constructs.
-
-#### Variable Assignment
-
-Assign a value to a variable:
-
-```imperivm
-push 42
-let x
-```
+Instructions include variable stack operations, arithmetic operations, and control flow constructs.
 
 
 #### Memory Operations

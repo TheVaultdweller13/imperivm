@@ -1,6 +1,6 @@
 main begin
   push 1
-  let x
+  pop x
   negate x
 
   push 2

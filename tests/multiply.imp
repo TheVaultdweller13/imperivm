@@ -1,7 +1,7 @@
 main
     begin
         push 84781
-        let x
+        pop x
         push 0
         multiply x
         exit x

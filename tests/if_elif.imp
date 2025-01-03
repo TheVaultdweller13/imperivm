@@ -1,9 +1,9 @@
 main
     begin
         push 0
-        let x
+        pop x
         push 1
-        let y
+        pop y
         if x
             begin
                 exit 1
