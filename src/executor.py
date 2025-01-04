@@ -112,7 +112,7 @@ class ImperivmExecutor:
     def instruction_not(self, args, bindings):
         ((_, target),) = args
         old = bindings.resolve(target)
-        bindings.assign(target, 0 if old else old)
+        bindings.assign(target, 0 if old else 1)
 
     def instruction_if(self, args, bindings):
         for index in range(0, len(args) - 1, 2):
