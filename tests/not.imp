@@ -6,4 +6,14 @@ main begin
   if x do
     exit 1
   end
+
+  push 0
+  pop x
+  not x
+
+  if x do
+    exit 0
+  end
+
+  exit 1
 end
