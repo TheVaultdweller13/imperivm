@@ -89,6 +89,9 @@ class ImperivmVisitor(NodeVisitor):
     def visit_float(self, node, _):
         return "float", float(node.text)
 
+    def visit_boolean(self, node, _):
+        return "boolean", node.text
+
     def visit_identifier(self, node, _):
         return "id", node.text
 

@@ -1,5 +1,5 @@
 main begin
-  push 1
+  push true
   pop x
   not x
   
@@ -7,7 +7,7 @@ main begin
     exit 1
   end
 
-  push 0
+  push false
   pop x
   not x
 

@@ -112,7 +112,7 @@ class ImperivmExecutor:
     def instruction_not(self, args, bindings):
         ((_, target),) = args
         old = bindings.resolve(target)
-        bindings.assign(target, 0 if old else 1)
+        bindings.assign(target, not old)
 
     def instruction_if(self, args, bindings):
         for index in range(0, len(args) - 1, 2):
@@ -182,6 +182,9 @@ class ImperivmExecutor:
         kind, content = value
         if kind == "id":
             return bindings.resolve(content)
+
+        if kind == "boolean":
+            return content == "true"
 
         return content
 

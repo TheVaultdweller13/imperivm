@@ -16,13 +16,14 @@ imperivm = Grammar(
     halt            = exit sp_1n value
 
     value           = identifier / literal
-    literal         = integer / float / string
+    literal         = integer / float / string / boolean
 
     identifier      = !reserved ~r"[a-z][a-z0-9_]*"i
     
     integer         = ~r"-?(0|([1-9][0-9]*))"
     float           = ~r"-?(0|([1-9][0-9]*))\.[0-9]+"
     string          = quote string_text quote
+    boolean         = true / false
 
     quote           = "\""
     string_text     = ~r"([^\"\\]|\\.)*"
@@ -35,7 +36,8 @@ imperivm = Grammar(
 
     reserved        = begin / end / stop / if / elif / else / while / push
                         / pop / add / subtract / multiply / divide / and
-                        / or / xor / not / print / exit / store / load
+                        / or / xor / not / print / exit / store / load / true
+                        / false
     begin           = ~r"begin"i / ~r"do"i
     exit            = ~r"exit"i
     end             = ~r"end"i
@@ -58,5 +60,7 @@ imperivm = Grammar(
     print           = ~r"print"i
     store           = ~r"store"i
     load            = ~r"load"i
+    true            = ~r"true"i
+    false           = ~r"false"i
     """
 )
