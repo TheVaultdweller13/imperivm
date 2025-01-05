@@ -29,6 +29,9 @@ class ImperivmExecutor:
             "xor": self.instruction_xor,
             "negate": self.instruction_negate,
             "not": self.instruction_not,
+            "equal": self.instruction_equal,
+            "greater": self.instruction_greater,
+            "lesser": self.instruction_lesser,
             "if": self.instruction_if,
             "while": self.instruction_while,
             "exit": lambda args, bindings: exit(self.resolve_value(args[0], bindings)),
@@ -113,6 +116,24 @@ class ImperivmExecutor:
         ((_, target),) = args
         old = bindings.resolve(target)
         bindings.assign(target, not old)
+
+    def instruction_equal(self, args, bindings):
+        ((_, target),) = args
+        argument = self.stack.pop()
+        old = bindings.resolve(target)
+        bindings.assign(target, old == argument)
+
+    def instruction_greater(self, args, bindings):
+        ((_, target),) = args
+        argument = self.stack.pop()
+        old = bindings.resolve(target)
+        bindings.assign(target, old > argument)
+
+    def instruction_lesser(self, args, bindings):
+        ((_, target),) = args
+        argument = self.stack.pop()
+        old = bindings.resolve(target)
+        bindings.assign(target, old < argument)
 
     def instruction_if(self, args, bindings):
         for index in range(0, len(args) - 1, 2):

@@ -69,7 +69,7 @@ class ImperivmVisitor(NodeVisitor):
     def visit_stop(self, _, __):
         return ("stop",)
 
-    def visit_halt(self, node, visited_children):
+    def visit_halt(self, _, visited_children):
         operation, _, status_code = visited_children
         return operation.text, status_code
 

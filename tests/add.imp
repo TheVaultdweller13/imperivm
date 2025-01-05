@@ -1,9 +1,15 @@
-main
-    begin
-        push -5
-        pop x
-        push 5
-        add x
-        exit x
-        exit 1
+main begin
+    push 37
+    pop x
+
+    push 5
+    add x
+    
+    push 42
+    equal x
+    
+    if x do
+        exit 0
     end
+    exit 1
+end
