@@ -69,7 +69,7 @@ class ImperivmVisitor(NodeVisitor):
     def visit_stop(self, _, __):
         return ("stop",)
 
-    def visit_halt(self, node, visited_children):
+    def visit_halt(self, _, visited_children):
         operation, _, status_code = visited_children
         return operation.text, status_code
 
@@ -88,6 +88,9 @@ class ImperivmVisitor(NodeVisitor):
 
     def visit_float(self, node, _):
         return "float", float(node.text)
+
+    def visit_boolean(self, node, _):
+        return "boolean", node.text
 
     def visit_identifier(self, node, _):
         return "id", node.text

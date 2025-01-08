@@ -5,24 +5,28 @@ imperivm = Grammar(
     program         = ws_0n subroutine (sp_0n br ws_0n subroutine)* ws_0n
     subroutine      = identifier ws_1n block
     block           = begin ws_1n (instruction (sp_0n br ws_0n instruction)*)? ws_1n end
-    instruction     = conditional / loop / stack / op / io / stop
-                        / identifier / halt / store / load
+    instruction     = conditional / loop / stack / op / io / stop / identifier
+                        / halt / store / load
 
-    conditional     = if sp_1n value ws_1n block (ws_1n elif sp_1n value ws_1n block)* (ws_1n else ws_1n block)?
+    conditional     = if sp_1n value ws_1n
+                        block (ws_1n elif sp_1n value ws_1n block)*
+                        (ws_1n else ws_1n block)?
     loop            = while sp_1n value ws_1n block
     stack           = (push sp_1n value) / (pop sp_1n identifier)
-    op              = (add / subtract / multiply / divide / and / or / xor / negate / not) sp_1n identifier
+    op              = (add / subtract / multiply / divide / and / or / xor
+                        / negate / not / equal / greater / lesser) sp_1n identifier
     io              = print sp_1n value
     halt            = exit sp_1n value
 
     value           = identifier / literal
-    literal         = integer / float / string
+    literal         = integer / float / string / boolean
 
     identifier      = !reserved ~r"[a-z][a-z0-9_]*"i
     
     integer         = ~r"-?(0|([1-9][0-9]*))"
     float           = ~r"-?(0|([1-9][0-9]*))\.[0-9]+"
     string          = quote string_text quote
+    boolean         = true / false
 
     quote           = "\""
     string_text     = ~r"([^\"\\]|\\.)*"
@@ -35,7 +39,8 @@ imperivm = Grammar(
 
     reserved        = begin / end / stop / if / elif / else / while / push
                         / pop / add / subtract / multiply / divide / and
-                        / or / xor / not / print / exit / store / load
+                        / or / xor / not / print / exit / store / load / true
+                        / false / equal / greater / lesser
     begin           = ~r"begin"i / ~r"do"i
     exit            = ~r"exit"i
     end             = ~r"end"i
@@ -58,5 +63,10 @@ imperivm = Grammar(
     print           = ~r"print"i
     store           = ~r"store"i
     load            = ~r"load"i
+    true            = ~r"true"i
+    false           = ~r"false"i
+    equal           = ~r"equal"i
+    greater         = ~r"greater"i
+    lesser          = ~r"lesser"i
     """
 )
