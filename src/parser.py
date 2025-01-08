@@ -29,7 +29,7 @@ class ImperivmParser:
         self.visitor = visitor
         self.preprocessor = preprocessor
 
-    def parse(self, program):
+    def parse(self, program: str):
         program = self.preprocessor.process(program)
         tree = self.grammar.parse(program)
         return Ast(self.visitor.visit(tree))
