@@ -7,6 +7,17 @@ import visitor
 import preprocessor
 
 
+class Ast:
+    def __init__(self, tree: tuple):
+        self.tree = tree
+
+    def __iter__(self):
+        return self.tree.__iter__()
+
+    def __repr__(self):
+        return self.tree.__repr__()
+
+
 class ImperivmParser:
     def __init__(
         self,
@@ -18,10 +29,10 @@ class ImperivmParser:
         self.visitor = visitor
         self.preprocessor = preprocessor
 
-    def parse(self, program):
+    def parse(self, program: str):
         program = self.preprocessor.process(program)
         tree = self.grammar.parse(program)
-        return self.visitor.visit(tree)
+        return Ast(self.visitor.visit(tree))
 
 
 if __name__ == "__main__":

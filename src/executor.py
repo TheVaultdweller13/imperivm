@@ -1,6 +1,7 @@
 import inspect
 
 from bindings import Bindings
+from parser import Ast
 
 
 class UnknownSubroutine(Exception):
@@ -12,7 +13,7 @@ class InvalidMemoryAddressException(Exception):
 
 
 class ImperivmExecutor:
-    def __init__(self, ast):
+    def __init__(self, ast: Ast):
         self.subroutines = {}
         self.stack = []
         self.heap = []
